@@ -1,0 +1,127 @@
+name: Build and deploy
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ⛏ Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, zip, exif, pcntl
+          tools: composer:v2
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Copy .env file
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Install Laravel dependencies
+        run: composer install --prefer-dist --no-progress --optimize-autoloader --no-dev
+      - name: Generate application key
+        run: php artisan key:generate
+      - name: Install Vue.js dependencies
+        run: npm ci
+      - name: Build Vue.js dependencies
+        run: npm run build
+      - name: Cache Laravel dependencies
+        run: |
+          php artisan optimize
+          php artisan config:cache
+          php artisan event:cache
+          php artisan route:cache
+          php artisan view:cache
+      - name: Archive production artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: |
+            .env
+            app
+            bootstrap
+            config
+            database
+            lang
+            public
+            resources
+            routes
+            storage
+            composer.json
+            composer.lock
+            artisan
+          compression-level: 9
+
+  test:
+    name: 🧪 Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: .
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, zip, exif, pcntl
+          coverage: none
+          tools: composer:v2
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install npm dependencies
+        run: npm ci
+      - name: Copy env
+        run: cp .env.example .env
+      - name: Generate application key
+        run: php artisan key:generate
+      - name: Run tests
+        run: php artisan test
+
+  deploy:
+    name: 🚀 Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: .
+      - name: Sync files to hosting
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            node_modules/**
+            tests/**
+            storage/logs/**
+            vendor/**
+
