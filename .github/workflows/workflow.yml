@@ -114,11 +114,20 @@ jobs:
             cd domains/dommmin.smallhost.pl
 
             # Tworzymy nowy katalog w releases z unikalnym timestampem
-            TIMESTAMP=\$(date +'%Y%m%d%H%M%S')
-            RELEASE_DIR=releases/\$TIMESTAMP
-            mkdir -p \$RELEASE_DIR
+            TIMESTAMP=$(date +'%Y%m%d%H%M%S')
+            RELEASE_DIR=releases/$TIMESTAMP
+
+            # Sprawdzamy, czy katalog już istnieje
+            if [ -d "$RELEASE_DIR" ]; then
+            echo "Katalog $RELEASE_DIR już istnieje, generuję nową nazwę..."
+            TIMESTAMP=$(date +'%Y%m%d%H%M%S-%N')
+            RELEASE_DIR=releases/$TIMESTAMP
+            fi
+
+            # Tworzymy katalog
+            mkdir -p $RELEASE_DIR
 
             # Kopiujemy pliki do nowej wersji (z folderu głównego do releases)
-            rsync -av --exclude='vendor' --exclude='.env' ./ \$RELEASE_DIR/
+            rsync -av --exclude='vendor' --exclude='.env' ./ $RELEASE_DIR/
             echo 'Files synced to release directory'
           "
