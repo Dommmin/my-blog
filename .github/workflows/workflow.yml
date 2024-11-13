@@ -109,7 +109,7 @@ jobs:
         run: |
           # Zdefiniuj zmienną z timestampem i nowym katalogiem na serwerze
           TIMESTAMP=$(date +"%Y%m%d%H%M%S")
-          NEW_RELEASE_DIR="domains/dommmin.smallhost.pl/releases/$TIMESTAMP"
+          NEW_RELEASE_DIR="domains/releases/$TIMESTAMP"
 
           # Utwórz nowy katalog na serwerze
           sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p $NEW_RELEASE_DIR"
@@ -120,7 +120,7 @@ jobs:
           # Uruchom `composer install` na serwerze dla nowej wersji
           sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
             cd $NEW_RELEASE_DIR
+            pwd
             composer install --no-dev --optimize-autoloader
           "
-
           echo "Deployment complete. Application is now running on the latest version."
