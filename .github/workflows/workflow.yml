@@ -131,7 +131,7 @@ jobs:
             echo 'Files synced to release directory'
 
             # Tworzenie linku symbolicznego "public_html" do folderu public nowej wersji
-            ln -nfs $RELEASE_DIR/public $SYMLINK_DIR
+            ln -sfT $RELEASE_DIR/public $SYMLINK_DIR
             echo 'Symlink to public folder updated'
 
             # Usuwanie starszych wersji, zachowując ostatnie 5
