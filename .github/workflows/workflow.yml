@@ -107,27 +107,16 @@ jobs:
         env:
           SSH_PASS: ${{ secrets.SSH_PASSWORD }}
         run: |
-          # Połączenie przez SSH i wykonanie komend na serwerze
-          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+          # Połącz się przez SSH
+          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
 
-            # Przechodzimy do katalogu aplikacji
-            cd domains/dommmin.smallhost.pl
+          # Przejdź do katalogu aplikacji
+          cd domains/dommmin.smallhost.pl
 
-            # Tworzymy nowy katalog w releases z unikalnym timestampem
-            TIMESTAMP=$(date +'%Y%m%d%H%M%S')
-            RELEASE_DIR=releases/$TIMESTAMP
+          # Utwórz nowy katalog
+          TIMESTAMP=$(date +'%Y%m%d%H%M%S')
+          RELEASE_DIR=releases/$TIMESTAMP
+          mkdir -p $RELEASE_DIR
 
-            # Sprawdzamy, czy katalog już istnieje
-            if [ -d "$RELEASE_DIR" ]; then
-            echo "Katalog $RELEASE_DIR już istnieje, generuję nową nazwę..."
-            TIMESTAMP=$(date +'%Y%m%d%H%M%S-%N')
-            RELEASE_DIR=releases/$TIMESTAMP
-            fi
-
-            # Tworzymy katalog
-            mkdir -p $RELEASE_DIR
-
-            # Kopiujemy pliki do nowej wersji (z folderu głównego do releases)
-            rsync -av --exclude='vendor' --exclude='.env' ./ $RELEASE_DIR/
-            echo 'Files synced to release directory'
-          "
+          # Spróbuj skopiować pliki
+          rsync -av --exclude='vendor' --exclude='.env' ./ $RELEASE_DIR/
