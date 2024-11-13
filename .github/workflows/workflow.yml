@@ -112,45 +112,30 @@ jobs:
           name: build
           path: .
 
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
-
       - name: Deploy to server via SSH
         env:
           SSH_PASS: ${{ secrets.SSH_PASSWORD }}
         run: |
           TIMESTAMP=$(date +'%Y%m%d%H%M%S')
           RELEASE_DIR="domains/dommmin.smallhost.pl/releases/$TIMESTAMP"
-          SYMLINK_DIR="domains/dommmin.smallhost.pl/current"  # Link symboliczny "current" do public nowej wersji
+          SYMLINK_DIR="domains/dommmin.smallhost.pl/current"
 
           # Połączenie przez SSH i wykonanie komend na serwerze
           sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
             # Tworzenie katalogu dla nowej wersji
-            mkdir -p $RELEASE_DIR &&
+            mkdir -p $RELEASE_DIR
             echo 'Created release directory'
 
-            # Transfer plików do nowej wersji (pomijając vendor i .env)
-            rsync -av --exclude='vendor' --exclude='.env' ./ $RELEASE_DIR &&
+            # Transfer plików do nowej wersji (bez pomijania vendor i .env)
+            rsync -av ./ $RELEASE_DIR
             echo 'Files synced to release directory'
 
-            # Kopiowanie pliku .env
-            cp $SYMLINK_DIR/../.env $RELEASE_DIR/.env &&
-            echo '.env copied'
-
-            # Instalacja zależności i optymalizacja Laravel
-            cd $RELEASE_DIR &&
-            composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader &&
-            php artisan config:cache &&
-            php artisan route:cache &&
-            php artisan view:cache &&
-            echo 'Dependencies installed and caches cleared'
-
             # Tworzenie linku symbolicznego "current" do folderu public nowej wersji
-            ln -nfs $RELEASE_DIR/public $SYMLINK_DIR &&
+            ln -nfs $RELEASE_DIR/public $SYMLINK_DIR
             echo 'Symlink to public folder updated'
 
             # Usuwanie starszych wersji, zachowując ostatnie 5
-            cd domains/dommmin.smallhost.pl/releases &&
-            ls -1tr | head -n -5 | xargs -d '\n' rm -rf -- &&
+            cd domains/dommmin.smallhost.pl/releases
+            ls -1tr | head -n -5 | xargs -d '\n' rm -rf --
             echo 'Old versions cleaned up'
           "
