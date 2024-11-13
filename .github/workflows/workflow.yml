@@ -111,17 +111,37 @@ jobs:
         with:
           name: build
           path: .
-      - name: Sync files to hosting
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          exclude: |
-            **/.git*
-            **/.git*/**
-            node_modules/**
-            tests/**
-            storage/logs/**
-            vendor/**
 
+      - name: Deploy to server via SSH
+        env:
+          SSH_PASS: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          TIMESTAMP=$(date +'%Y%m%d%H%M%S')
+          RELEASE_DIR="domains/dommmin.smallhost.pl/releases/$TIMESTAMP"
+          SYMLINK_DIR="domains/dommmin.smallhost.pl/public_html"
+
+          # Połączenie przez SSH i wykonanie komend na serwerze
+          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            # Tworzenie katalogu dla nowej wersji
+            mkdir -p $RELEASE_DIR &&
+
+            # Transfer plików do nowej wersji
+            rsync -av --exclude='vendor' --exclude='.env' ./ $RELEASE_DIR &&
+
+            # Kopiowanie pliku .env
+            cp $SYMLINK_DIR/../.env $RELEASE_DIR/.env &&
+
+            # Instalacja zależności i optymalizacja Laravel
+            cd $RELEASE_DIR &&
+            composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader &&
+            php artisan config:cache &&
+            php artisan route:cache &&
+            php artisan view:cache &&
+
+            # Aktualizacja linku symbolicznego public_html do katalogu public nowej wersji
+            ln -nfs $RELEASE_DIR/public $SYMLINK_DIR &&
+
+            # Usuwanie starszych wersji, zachowując ostatnie 5
+            cd domains/dommmin.smallhost.pl/releases &&
+            ls -1tr | head -n -5 | xargs -d '\n' rm -rf --
+          "
