@@ -101,24 +101,26 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: .
+          path: ./build
 
       - name: Deploy to server via SSH
         env:
           SSH_PASS: ${{ secrets.SSH_PASSWORD }}
         run: |
-          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+          # Zdefiniuj zmienną z timestampem i nowym katalogiem na serwerze
+          TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+          NEW_RELEASE_DIR="domains/dommmin.smallhost.pl/releases/$TIMESTAMP"
 
-            # Przejdź do katalogu aplikacji
-            cd domains/dommmin.smallhost.pl
+          # Utwórz nowy katalog na serwerze
+          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p $NEW_RELEASE_DIR"
 
-            # Utwórz nowy katalog z timestampem
-            TIMESTAMP=$(date +"%Y%m%d%H%M%S")
-            NEW_RELEASE_DIR="releases/\$TIMESTAMP"
-            mkdir -p \$NEW_RELEASE_DIR
+          # Skopiuj artefakt buildu do katalogu wersji na serwerze
+          sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no -r ./build/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$NEW_RELEASE_DIR/
 
-            # Skopiuj pliki z katalogu głównego do nowej wersji
-            rsync -avz --delete --exclude='vendor' --exclude='.env' . "\$NEW_RELEASE_DIR/"
+          # Uruchom `composer install` na serwerze dla nowej wersji
+          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            cd $NEW_RELEASE_DIR
+            composer install --no-dev --optimize-autoloader
+          "
 
-            echo "Deployment complete. Application is now running on the latest version."
-          EOF
+          echo "Deployment complete. Application is now running on the latest version."
