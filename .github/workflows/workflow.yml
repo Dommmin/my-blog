@@ -119,7 +119,7 @@ jobs:
             mkdir -p \$RELEASE_DIR
 
             # Kopiujemy pliki do nowej wersji (bez vendor i .env)
-            rsync -av --exclude='vendor' --exclude='.env' domains/dommmin.smallhost.pl/ \$RELEASE_DIR/
+            rsync -av --exclude='vendor' --exclude='.env' ./ \$RELEASE_DIR/
             echo 'Files synced to release directory'
 
             # Wchodzimy do folderu nowej wersji
