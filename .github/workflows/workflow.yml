@@ -116,9 +116,11 @@ jobs:
             # Tworzymy nowy katalog w releases z unikalnym timestampem
             TIMESTAMP=\$(date +'%Y%m%d%H%M%S')
             RELEASE_DIR=releases/\$TIMESTAMP
-            mkdir -p \$RELEASE_DIR
 
-            # Przechodzimy do utworzonego katalogu
-            cd $RELEASE_DIR
-            mkdir test
+            # Wyświetlamy zmienną RELEASE_DIR
+            echo 'Nowy katalog release: \$RELEASE_DIR'
+
+            # Kopiujemy pliki do nowej wersji (z folderu głównego do releases)
+            rsync -av --exclude='vendor' --exclude='.env' ./ \$RELEASE_DIR/
+            echo 'Files synced to release directory'
           "
