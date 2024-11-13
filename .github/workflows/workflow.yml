@@ -117,8 +117,8 @@ jobs:
           SSH_PASS: ${{ secrets.SSH_PASSWORD }}
         run: |
           TIMESTAMP=$(date +'%Y%m%d%H%M%S')
-          RELEASE_DIR="domains/dommmin.smallhost.pl/releases/$TIMESTAMP"
-          SYMLINK_DIR="domains/dommmin.smallhost.pl/current"
+          RELEASE_DIR="releases/$TIMESTAMP"
+          SYMLINK_DIR="public_html"
 
           # Połączenie przez SSH i wykonanie komend na serwerze
           sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
@@ -130,12 +130,12 @@ jobs:
             rsync -av ./ $RELEASE_DIR
             echo 'Files synced to release directory'
 
-            # Tworzenie linku symbolicznego "current" do folderu public nowej wersji
+            # Tworzenie linku symbolicznego "public_html" do folderu public nowej wersji
             ln -nfs $RELEASE_DIR/public $SYMLINK_DIR
             echo 'Symlink to public folder updated'
 
             # Usuwanie starszych wersji, zachowując ostatnie 5
-            cd domains/dommmin.smallhost.pl/releases
+            cd releases
             ls -1tr | head -n -5 | xargs -d '\n' rm -rf --
             echo 'Old versions cleaned up'
           "
