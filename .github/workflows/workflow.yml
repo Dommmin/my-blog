@@ -107,16 +107,30 @@ jobs:
         env:
           SSH_PASS: ${{ secrets.SSH_PASSWORD }}
         run: |
-          # Połącz się przez SSH
-          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
 
           # Przejdź do katalogu aplikacji
           cd domains/dommmin.smallhost.pl
 
-          # Utwórz nowy katalog
-          TIMESTAMP=$(date +'%Y%m%d%H%M%S')
-          RELEASE_DIR=releases/$TIMESTAMP
-          mkdir -p $RELEASE_DIR
+          # Utwórz nowy katalog z timestampem
+          TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+          NEW_RELEASE_DIR="releases/$TIMESTAMP"
+          mkdir -p "$NEW_RELEASE_DIR"
 
-          # Spróbuj skopiować pliki
-          rsync -av --exclude='vendor' --exclude='.env' ./ $RELEASE_DIR/
+          # Skopiuj pliki do nowej wersji
+          rsync -avz --delete --exclude='vendor' --exclude='.env' ./ "$NEW_RELEASE_DIR/"
+
+          # Utwórz lub zaktualizuj symlink do najnowszej wersji
+          if [ -L "current" ]; then
+          # Jeśli symlink istnieje, przenieś go do poprzedniej wersji
+          mv "current" "previous"
+          fi
+          ln -sfn "$NEW_RELEASE_DIR" "current"
+
+          # Usuń starą wersję (poprzednią)
+          if [ -d "previous" ]; then
+          rm -rf "previous"
+          fi
+
+          echo "Deployment complete. Application is now running on the latest version."
+          EOF
