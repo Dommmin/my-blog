@@ -119,18 +119,6 @@ jobs:
             mkdir -p \$RELEASE_DIR
 
             # Kopiujemy pliki do nowej wersji (z folderu głównego do releases)
-            rsync -av --exclude='vendor' --exclude='.env' ./ \$RELEASE_DIR/
+            rsync -av --exclude='vendor' --exclude='.env' . \$RELEASE_DIR/
             echo 'Files synced to release directory'
-
-            # Wchodzimy do folderu nowej wersji
-            cd \$RELEASE_DIR
-
-            # Instalujemy zależności PHP na serwerze
-            composer install --prefer-dist --no-progress --optimize-autoloader --no-dev
-
-            # Opcjonalnie - uruchamiamy komendy Artisan (np. cache)
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
-            php artisan optimize
           "
