@@ -109,18 +109,16 @@ jobs:
         run: |
           sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
 
-          # Przejdź do katalogu aplikacji
-          cd domains/dommmin.smallhost.pl
+            # Przejdź do katalogu aplikacji
+            cd domains/dommmin.smallhost.pl
 
-          # Utwórz nowy katalog z timestampem
-          TIMESTAMP=$(date +"%Y%m%d%H%M%S")
-          NEW_RELEASE_DIR="releases/\$TIMESTAMP"
-          mkdir -p \$NEW_RELEASE_DIR
+            # Utwórz nowy katalog z timestampem
+            TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+            NEW_RELEASE_DIR="releases/\$TIMESTAMP"
+            mkdir -p \$NEW_RELEASE_DIR
 
-          cd releases/\$TIMESTAMP
+            # Skopiuj pliki z katalogu głównego do nowej wersji
+            rsync -avz --delete --exclude='vendor' --exclude='.env' . "\$NEW_RELEASE_DIR/"
 
-          # Skopiuj pliki do nowej wersji
-          rsync -avz --delete --exclude='vendor' --exclude='.env' ./ .
-
-          echo "Deployment complete. Application is now running on the latest version."
+            echo "Deployment complete. Application is now running on the latest version."
           EOF
