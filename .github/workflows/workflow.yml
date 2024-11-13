@@ -115,22 +115,10 @@ jobs:
           # Utwórz nowy katalog z timestampem
           TIMESTAMP=$(date +"%Y%m%d%H%M%S")
           NEW_RELEASE_DIR="releases/$TIMESTAMP"
-          mkdir -p \$RELEASE_DIR
+          mkdir -p \$NEW_RELEASE_DIR
 
           # Skopiuj pliki do nowej wersji
-          rsync -avz --delete --exclude='vendor' --exclude='.env' ./ "$NEW_RELEASE_DIR/"
-
-          # Utwórz lub zaktualizuj symlink do najnowszej wersji
-          if [ -L "current" ]; then
-          # Jeśli symlink istnieje, przenieś go do poprzedniej wersji
-          mv "current" "previous"
-          fi
-          ln -sfn "$NEW_RELEASE_DIR" "current"
-
-          # Usuń starą wersję (poprzednią)
-          if [ -d "previous" ]; then
-          rm -rf "previous"
-          fi
+          rsync -avz --delete --exclude='vendor' --exclude='.env' ./ \$NEW_RELEASE_DIR/
 
           echo "Deployment complete. Application is now running on the latest version."
           EOF
