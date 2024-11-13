@@ -112,6 +112,8 @@ jobs:
           # Przejdź do katalogu aplikacji
           cd domains/dommmin.smallhost.pl
 
+          pwd
+
           # Utwórz nowy katalog z timestampem
           TIMESTAMP=$(date +"%Y%m%d%H%M%S")
           NEW_RELEASE_DIR="releases/$TIMESTAMP"
