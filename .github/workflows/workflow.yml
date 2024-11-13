@@ -117,4 +117,8 @@ jobs:
             TIMESTAMP=\$(date +'%Y%m%d%H%M%S')
             RELEASE_DIR=releases/\$TIMESTAMP
             mkdir -p \$RELEASE_DIR
+
+            # Przechodzimy do utworzonego katalogu
+            cd $RELEASE_DIR
+            mkdir test
           "
