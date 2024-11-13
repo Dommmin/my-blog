@@ -35,19 +35,10 @@ jobs:
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Install Laravel dependencies
         run: composer install --prefer-dist --no-progress --optimize-autoloader --no-dev
-      - name: Generate application key
-        run: php artisan key:generate
       - name: Install Vue.js dependencies
         run: npm ci
       - name: Build Vue.js dependencies
         run: npm run build
-      - name: Cache Laravel dependencies
-        run: |
-          php artisan optimize
-          php artisan config:cache
-          php artisan event:cache
-          php artisan route:cache
-          php artisan view:cache
       - name: Archive production artifact
         uses: actions/upload-artifact@v4
         with:
@@ -119,9 +110,24 @@ jobs:
           # Połączenie przez SSH i wykonanie komend na serwerze
           sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
 
-            # Transfer plików do nowej wersji (bez pomijania vendor i .env)
-            cd domains/dommmin.smallhost.pl/
-            mkdir current
-            rsync -av ./current/
+            # Tworzymy folder dla nowej wersji z unikalną nazwą
+            TIMESTAMP=\$(date +'%Y%m%d%H%M%S')
+            RELEASE_DIR=domains/dommmin.smallhost.pl/releases/\$TIMESTAMP
+            mkdir -p \$RELEASE_DIR
+
+            # Kopiujemy pliki do nowej wersji (bez vendor i .env)
+            rsync -av --exclude='vendor' --exclude='.env' ./ \$RELEASE_DIR
             echo 'Files synced to release directory'
+
+            # Wchodzimy do folderu nowej wersji
+            cd \$RELEASE_DIR
+
+            # Instalujemy zależności PHP na serwerze
+            composer install --prefer-dist --no-progress --optimize-autoloader --no-dev
+
+            # Opcjonalnie - uruchamiamy komendy Artisan (np. cache)
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan optimize
           "
