@@ -113,7 +113,11 @@ jobs:
             # Przechodzimy do katalogu aplikacji
             cd domains/dommmin.smallhost.pl
 
+            # Tworzymy nowy katalog w releases z unikalnym timestampem
+            TIMESTAMP=\$(date +'%Y%m%d%H%M%S')
+            RELEASE_DIR=releases/\$TIMESTAMP
+
             # Kopiujemy pliki do nowej wersji (z folderu głównego do releases)
-            rsync -av --exclude='vendor' --exclude='.env' . releases/TIMESTAMP=\$(date +'%Y%m%d%H%M%S')
+            rsync -av --exclude='vendor' --exclude='.env' ./*  \$RELEASE_DIR/
             echo 'Files synced to release directory'
           "
