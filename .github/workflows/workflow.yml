@@ -110,7 +110,7 @@ jobs:
           # Połączenie przez SSH i wykonanie komend na serwerze
           sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
 
-            # Przechodzimy do katalogu, w którym znajduje się aplikacja
+            # Przechodzimy do katalogu aplikacji
             cd domains/dommmin.smallhost.pl
 
             # Tworzymy nowy katalog w releases z unikalnym timestampem
@@ -118,7 +118,7 @@ jobs:
             RELEASE_DIR=releases/\$TIMESTAMP
             mkdir -p \$RELEASE_DIR
 
-            # Kopiujemy pliki do nowej wersji (bez vendor i .env)
+            # Kopiujemy pliki do nowej wersji (z folderu głównego do releases)
             rsync -av --exclude='vendor' --exclude='.env' ./ \$RELEASE_DIR/
             echo 'Files synced to release directory'
 
