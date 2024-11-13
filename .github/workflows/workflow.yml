@@ -115,9 +115,12 @@ jobs:
           # Utwórz nowy katalog z timestampem
           TIMESTAMP=$(date +"%Y%m%d%H%M%S")
           NEW_RELEASE_DIR="releases/\$TIMESTAMP"
+          mkdir -p \$NEW_RELEASE_DIR
+
+          cd releases/\$TIMESTAMP
 
           # Skopiuj pliki do nowej wersji
-          rsync -avz --delete --exclude='vendor' --exclude='.env' ./ \$NEW_RELEASE_DIR/
+          rsync -avz --delete --exclude='vendor' --exclude='.env' ./ .
 
           echo "Deployment complete. Application is now running on the latest version."
           EOF
