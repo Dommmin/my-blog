@@ -112,12 +112,10 @@ jobs:
           # Przejdź do katalogu aplikacji
           cd domains/dommmin.smallhost.pl
 
-          pwd
-
           # Utwórz nowy katalog z timestampem
           TIMESTAMP=$(date +"%Y%m%d%H%M%S")
           NEW_RELEASE_DIR="releases/$TIMESTAMP"
-          mkdir -p "$NEW_RELEASE_DIR"
+          mkdir -p \$RELEASE_DIR
 
           # Skopiuj pliki do nowej wersji
           rsync -avz --delete --exclude='vendor' --exclude='.env' ./ "$NEW_RELEASE_DIR/"
