@@ -115,7 +115,7 @@ jobs:
 
             # Tworzymy nowy katalog w releases z unikalnym timestampem
             TIMESTAMP=\$(date +'%Y%m%d%H%M%S')
-            RELEASE_DIR=domains/dommmin.smallhost.pl/releases/\$TIMESTAMP
+            RELEASE_DIR=releases/\$TIMESTAMP
             mkdir -p \$RELEASE_DIR
 
             # Kopiujemy pliki do nowej wersji (bez vendor i .env)
