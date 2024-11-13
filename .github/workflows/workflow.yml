@@ -117,8 +117,8 @@ jobs:
           SSH_PASS: ${{ secrets.SSH_PASSWORD }}
         run: |
           TIMESTAMP=$(date +'%Y%m%d%H%M%S')
-          RELEASE_DIR="releases/$TIMESTAMP"
-          SYMLINK_DIR="public_html"
+          RELEASE_DIR="domains/dommmin.smallhost.pl/releases/$TIMESTAMP"
+          SYMLINK_DIR="domains/dommmin.smallhost.pl/public_html"
 
           # Połączenie przez SSH i wykonanie komend na serwerze
           sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
@@ -135,7 +135,7 @@ jobs:
             echo 'Symlink to public folder updated'
 
             # Usuwanie starszych wersji, zachowując ostatnie 5
-            cd releases
+            cd domains/dommmin.smallhost.pl/releases
             ls -1tr | head -n -5 | xargs -d '\n' rm -rf --
             echo 'Old versions cleaned up'
           "
