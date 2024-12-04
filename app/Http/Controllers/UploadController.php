@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UploadController extends Controller
 {
-    public function __construct(private readonly FileService $fileService)
-    {
-    }
+    public function __construct(private readonly FileService $fileService) {}
 
     public function __invoke(FileUploadRequest $request)
     {

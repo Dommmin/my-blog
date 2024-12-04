@@ -10,7 +10,10 @@
                 >
                     <Bars3Icon class="h-6 w-6" />
                 </button>
-                <Link :href="route('home')" class="text-xl font-semibold text-gray-800 dark:text-white">
+                <Link
+                    :href="route('home')"
+                    class="text-xl font-semibold text-gray-800 dark:text-white"
+                >
                     Blog
                 </Link>
             </div>
@@ -38,7 +41,7 @@
 <script setup>
 import { Bars3Icon } from '@heroicons/vue/24/solid';
 import { Link } from '@inertiajs/vue3';
-import ThemeButton from "@/Components/ThemeButton.vue";
+import ThemeButton from '@/Components/ThemeButton.vue';
 
 defineEmits(['toggleSidebar']);
 </script>

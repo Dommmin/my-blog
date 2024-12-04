@@ -4,7 +4,9 @@
 
         <FlashMessages />
 
-        <div class="min-h-screen bg-slate-100 dark:bg-gradient-to-b  dark:from-black/95 dark:to-black/80">
+        <div
+            class="min-h-screen bg-slate-100 dark:bg-gradient-to-b dark:from-black/95 dark:to-black/80"
+        >
             <nav>
                 <div class="mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 justify-between">
@@ -15,7 +17,9 @@
                                 </Link>
                             </div>
 
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div
+                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                            >
                                 <NavLink
                                     :href="route('home')"
                                     :active="route().current('home')"
@@ -25,12 +29,12 @@
                             </div>
                         </div>
 
-                        <div class="hidden space-x-2 sm:ms-6 sm:items-center lg:flex">
+                        <div
+                            class="hidden space-x-2 sm:ms-6 sm:items-center lg:flex"
+                        >
                             <ThemeButton />
                             <div class="ms-3 relative flex gap-2 items-center">
-                                <LoginButton
-                                    v-if="!$page.props.auth.user"
-                                />
+                                <LoginButton v-if="!$page.props.auth.user" />
 
                                 <!-- Teams Dropdown -->
                                 <Dropdown
@@ -269,7 +273,9 @@
                             </div>
                         </div>
 
-                        <div class="flex w-full items-center justify-between lg:hidden">
+                        <div
+                            class="flex w-full items-center justify-between lg:hidden"
+                        >
                             <div>
                                 <button
                                     type="button"
@@ -283,7 +289,12 @@
                                     @click="toggleNavigation"
                                     class="btn inline-flex items-center justify-center border-gray-700 p-2 transition-all ease-in-out hover:border-gray-700"
                                 >
-                                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                    <svg
+                                        class="h-6 w-6"
+                                        stroke="currentColor"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
                                         <!-- Ikona hamburgera -->
                                         <path
                                             v-if="!showingNavigationDropdown"
@@ -511,8 +522,8 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import FlashMessages from '@/Components/FlashMessages.vue';
-import ThemeButton from "@/Components/ThemeButton.vue";
-import LoginButton from "@/Components/LoginButton.vue";
+import ThemeButton from '@/Components/ThemeButton.vue';
+import LoginButton from '@/Components/LoginButton.vue';
 
 defineProps({
     title: String,

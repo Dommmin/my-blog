@@ -128,9 +128,7 @@
                                     class="flex items-center justify-end gap-2"
                                 >
                                     <Link
-                                        :href="
-                                            route('post.show', post.slug)
-                                        "
+                                        :href="route('post.show', post.slug)"
                                         class="inline-flex items-center rounded-lg p-2 text-sm font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:text-primary-500 dark:hover:bg-gray-700 dark:focus:ring-primary-800"
                                     >
                                         <EyeIcon class="h-5 w-5" />
@@ -173,7 +171,7 @@ import {
     MagnifyingGlassIcon,
     PencilSquareIcon,
     TrashIcon,
-    EyeIcon
+    EyeIcon,
 } from '@heroicons/vue/24/outline';
 
 const props = defineProps({

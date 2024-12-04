@@ -11,7 +11,7 @@ Route::get('/', [PostController::class, 'index'])->name('home');
 Route::get('posts/{post}', [PostController::class, 'show'])->name('post.show');
 Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::put('comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
-Route::delete('comments/{comment}', [CommentController::class,'destroy'])->name('comments.destroy');
+Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
     Route::get('/', HomeController::class)->name('home');

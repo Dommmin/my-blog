@@ -2,7 +2,9 @@
     <Head :title="title" />
 
     <FlashMessages />
-    <div class="h-screen bg-slate-100 dark:bg-gradient-to-b dark:from-black/95 dark:to-black/80">
+    <div
+        class="h-screen bg-slate-100 dark:bg-gradient-to-b dark:from-black/95 dark:to-black/80"
+    >
         <Header
             @toggle-sidebar="toggleSidebar"
             :is-sidebar-open="isSidebarOpen"

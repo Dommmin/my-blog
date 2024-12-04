@@ -15,5 +15,5 @@
 
 <script setup>
 import { LogInIcon } from 'lucide-vue-next';
-import NavLink from "./NavLink.vue";
+import NavLink from './NavLink.vue';
 </script>

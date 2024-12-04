@@ -1,22 +1,24 @@
 <template>
     <AppLayout :title="post.title">
-        <div class="py-12  min-h-screen">
+        <div class="py-12 min-h-screen">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-gray-900 dark:text-gray-100 bg-slate-200/80 dark:bg-black/50 rounded-lg shadow-md p-6 border dark:border-gray-700">
+                <div
+                    class="text-gray-900 dark:text-gray-100 bg-slate-200/80 dark:bg-black/50 rounded-lg shadow-md p-6 border dark:border-gray-700"
+                >
                     <div v-html="formattedBody" />
-<!--                    <button-->
-<!--                        @click="toggleContent"-->
-<!--                        class="mt-4 text-blue-600 hover:text-blue-800 focus:outline-none dark:text-blue-400 dark:hover:text-blue-500"-->
-<!--                    >-->
-<!--                        {{ showFullContent ? 'Collapse' : 'Read More' }}-->
-<!--                    </button>-->
+                    <!--                    <button-->
+                    <!--                        @click="toggleContent"-->
+                    <!--                        class="mt-4 text-blue-600 hover:text-blue-800 focus:outline-none dark:text-blue-400 dark:hover:text-blue-500"-->
+                    <!--                    >-->
+                    <!--                        {{ showFullContent ? 'Collapse' : 'Read More' }}-->
+                    <!--                    </button>-->
                     <div class="mt-8">
-                        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                        <h2
+                            class="text-xl font-bold mb-4 text-gray-900 dark:text-white"
+                        >
                             Comments
                         </h2>
-                        <div v-if="!comments.data.length">
-                            No comments ...
-                        </div>
+                        <div v-if="!comments.data.length">No comments ...</div>
                         <div
                             v-else
                             v-for="comment in comments.data"
@@ -30,18 +32,39 @@
                                     class="w-8 h-8 rounded-full mr-2"
                                 />
                                 <div>
-                                    <h3 class="font-medium text-gray-900 dark:text-white">
+                                    <h3
+                                        class="font-medium text-gray-900 dark:text-white"
+                                    >
                                         {{ comment.user.name }}
                                     </h3>
                                 </div>
-                                <div v-if="$page.props.auth.user?.id === comment.user.id"
-                                     class="absolute top-4 right-4 flex space-x-2">
+                                <div
+                                    v-if="
+                                        $page.props.auth.user?.id ===
+                                        comment.user.id
+                                    "
+                                    class="absolute top-4 right-4 flex space-x-2"
+                                >
                                     <button
                                         @click="startEditing(comment)"
                                         class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 focus:outline-none"
                                     >
                                         <i class="w-5 h-5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3Z"/></svg>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="20"
+                                                height="20"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <path
+                                                    d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3Z"
+                                                />
+                                            </svg>
                                         </i>
                                     </button>
                                     <button
@@ -49,7 +72,25 @@
                                         class="text-gray-600 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 focus:outline-none"
                                     >
                                         <i class="w-5 h-5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="20"
+                                                height="20"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <path d="M3 6h18" />
+                                                <path
+                                                    d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
+                                                />
+                                                <path
+                                                    d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"
+                                                />
+                                            </svg>
                                         </i>
                                     </button>
                                 </div>
@@ -65,7 +106,10 @@
                                     class="w-full bg-white dark:bg-gray-600 rounded-lg p-2 mb-2 text-gray-700 dark:text-gray-300"
                                     rows="3"
                                 ></textarea>
-                                <InputError :message="editForm.errors.content" class="mt-2" />
+                                <InputError
+                                    :message="editForm.errors.content"
+                                    class="mt-2"
+                                />
                                 <div class="flex space-x-2">
                                     <button
                                         @click="updateComment(comment.id)"
@@ -86,7 +130,9 @@
                             <Pagination :links="comments.links" />
                         </div>
                         <div v-if="$page.props.auth.user" class="mt-8">
-                            <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                            <h2
+                                class="text-xl font-bold mb-4 text-gray-900 dark:text-white"
+                            >
                                 Add Comment
                             </h2>
                             <div class="flex items-start">
@@ -96,7 +142,10 @@
                                         class="w-full bg-gray-100 dark:bg-gray-700 rounded-lg p-2 mb-2 text-gray-700 dark:text-gray-300"
                                         placeholder="Write your comment..."
                                     ></textarea>
-                                    <InputError :message="form.errors.content" class="mt-2" />
+                                    <InputError
+                                        :message="form.errors.content"
+                                        class="mt-2"
+                                    />
                                     <button
                                         @click="addComment"
                                         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:bg-blue-400 dark:hover:bg-blue-500"
@@ -232,9 +281,9 @@ const handleVisibilityChange = () => {
         router.reload({
             only: ['comments'],
             preserveUrl: true,
-        })
+        });
     }
-}
+};
 
 onMounted(() => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
