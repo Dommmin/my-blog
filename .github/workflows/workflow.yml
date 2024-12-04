@@ -1,0 +1,206 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: ⛏ Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_mysql, zip, exif, pcntl
+          tools: composer:v2
+          ini-values: memory_limit=512M
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Parallel Installation
+        run: |
+          composer install --prefer-dist --no-progress --optimize-autoloader --no-dev &
+          npm ci &
+          wait
+
+      - name: Build Vue.js dependencies
+        run: npm run build
+
+      - name: Optimize Laravel
+        run: |
+          php -r "file_exists('.env') || copy('.env.example', '.env');"
+          php artisan config:cache &
+          php artisan route:cache &
+          php artisan view:cache &
+          wait
+
+      - name: Prepare deployment files
+        run: |
+          rm -rf node_modules tests .git .github storage
+          rm -f .env.example phpunit.xml README.md package.json package-lock.json webpack.mix.js
+
+      - name: Archive production artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: |
+            .env
+            app
+            bootstrap
+            config
+            database
+            lang
+            public
+            public/build
+            resources
+            routes
+            vendor
+            composer.json
+            composer.lock
+            artisan
+          compression-level: 9
+
+  test:
+    name: 🧪 Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: .
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_mysql, zip, exif, pcntl
+          coverage: none
+          tools: composer:v2
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install npm dependencies
+        run: npm ci
+      - name: Copy env
+        run: cp .env.example .env
+      - name: Generate application key
+        run: php artisan key:generate
+      - name: Run tests
+        run: php artisan test
+  
+  deploy:
+    name: 🚀 Deploy
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: .
+
+      - name: Configure SSH for remote connection
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/deploy_key" > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
+      - name: Test SSH connection
+        run: ssh -i ~/.ssh/deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo SSH connection works!"
+
+      - name: Deploy application files to server
+        run: |
+          TIMESTAMP=$(date +%Y-%m-%d_%H-%M)
+          RELEASE_PATH=${{ secrets.DEPLOY_PATH }}/releases/$TIMESTAMP
+
+          rsync -avz --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$RELEASE_PATH/
+
+      - name: Finalize deployment
+        run: |
+          TIMESTAMP=$(date +%Y-%m-%d_%H-%M)
+          RELEASE_PATH=releases/$TIMESTAMP/
+          
+          ssh -i ~/.ssh/deploy_key "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "
+            cd ${{ secrets.DEPLOY_PATH }}
+            
+            # Use PHP 8.2
+            export PATH=/usr/local/devil/php82/bin:\$PATH
+            
+            php -v
+            pwd
+            echo ${{ secrets.DEPLOY_PATH }}
+            
+            # Upewnij się, że katalogi istnieją
+            mkdir -p $RELEASE_PATH/aplikacja/storage
+
+            # Atomowa podmiana symlinka
+            ln -sfn ${RELEASE_PATH} aplikacja || exit 1
+            ln -sfn ${{ secrets.DEPLOY_PATH }}/shared/storage ${{ secrets.DEPLOY_PATH }}/aplikacja/storage || exit 1
+
+            # Skopiuj plik .env
+            cp shared/.env aplikacja/.env
+
+            # Przejdź do katalogu aplikacji
+            cd aplikacja
+
+            # Instalacja zależności
+            composer install --no-interaction
+            
+            # Uruchom Artisan
+            php artisan optimize
+            php artisan storage:link
+            php artisan migrate --force
+            
+            # Reset Opcache
+            echo 'Resetting Opcache...'
+            php -r \"if (function_exists('opcache_reset')) { opcache_reset(); }\"
+          "
+
+      - name: Clean up old releases
+        run: |
+          ssh -i ~/.ssh/deploy_key "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "
+            cd ${{ secrets.DEPLOY_PATH }}/releases
+            ls -1t | tail -n +6 | xargs rm -rf
+          "
+      
+      - name: Verify Deployment
+        run: curl -sSf https://dommmin.smallhost.pl || exit 1
