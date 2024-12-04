@@ -16,6 +16,8 @@
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest"
+        ,
         "barryvdh/laravel-debugbar": "^3.14",
         "barryvdh/laravel-ide-helper": "^3.2",
         "fakerphp/faker": "^1.23",
