@@ -45,9 +45,16 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Cache vendor directory
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-vendor-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-vendor-
+
       - name: Parallel Installation
         run: |
-          composer install --prefer-dist --no-progress --optimize-autoloader --no-dev &
+          composer install --prefer-dist --no-progress --optimize-autoloader &
           npm ci &
           wait
 
@@ -58,11 +65,10 @@ jobs:
         run: |
           php -r "file_exists('.env') || copy('.env.example', '.env');"
           php artisan optimize
-          wait
 
       - name: Analyze
         run: |
-          composer pint
+          ./vendor/bin/pint
           composer larastan
           npm run lint
           npm run format
@@ -167,35 +173,25 @@ jobs:
           ssh -i ~/.ssh/deploy_key "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "
             cd ${{ secrets.DEPLOY_PATH }}
 
-            # Use PHP 8.2
             export PATH=/usr/local/devil/php82/bin:\$PATH
 
             php -v
             pwd
-            echo ${{ secrets.DEPLOY_PATH }}
 
-            # Upewnij się, że katalogi istnieją
             mkdir -p $RELEASE_PATH/aplikacja/storage
 
-            # Atomowa podmiana symlinka
             ln -sfn ${RELEASE_PATH} aplikacja || exit 1
             ln -sfn ${{ secrets.DEPLOY_PATH }}/shared/storage ${{ secrets.DEPLOY_PATH }}/aplikacja/storage || exit 1
 
-            # Skopiuj plik .env
             cp shared/.env aplikacja/.env
 
-            # Przejdź do katalogu aplikacji
             cd aplikacja
 
-            # Instalacja zależności
             composer install --no-interaction
-
-            # Uruchom Artisan
             php artisan optimize
             php artisan storage:link
             php artisan migrate --force
 
-            # Reset Opcache
             echo 'Resetting Opcache...'
             php -r \"if (function_exists('opcache_reset')) { opcache_reset(); }\"
           "
