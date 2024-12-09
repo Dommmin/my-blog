@@ -1,18 +1,10 @@
 <template>
     <AdminLayout title="Posts">
-        <div
-            class="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-black/90"
-        >
+        <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-black/90">
             <!-- Table header with actions -->
-            <div
-                class="flex flex-col gap-4 p-4 md:flex-row md:items-center md:justify-between"
-            >
+            <div class="flex flex-col gap-4 p-4 md:flex-row md:items-center md:justify-between">
                 <div class="flex items-center gap-2">
-                    <h2
-                        class="text-xl font-semibold text-gray-900 dark:text-white"
-                    >
-                        Posts
-                    </h2>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Posts</h2>
                     <span
                         class="rounded-full bg-gray-100 px-2.5 py-0.5 text-sm font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-300"
                     >
@@ -23,12 +15,8 @@
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
                     <!-- Search -->
                     <div class="relative w-full sm:w-64">
-                        <div
-                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                        >
-                            <MagnifyingGlassIcon
-                                class="h-5 w-5 text-gray-500 dark:text-gray-400"
-                            />
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <MagnifyingGlassIcon class="h-5 w-5 text-gray-500 dark:text-gray-400" />
                         </div>
                         <input
                             type="search"
@@ -50,20 +38,14 @@
 
             <!-- Table -->
             <div class="overflow-x-auto">
-                <table
-                    class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
-                >
-                    <thead
-                        class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-cyan-800 dark:text-gray-400"
-                    >
+                <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                    <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-cyan-800 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-4 py-3">Title</th>
                             <th scope="col" class="px-4 py-3">Published</th>
                             <th scope="col" class="px-4 py-3">Created</th>
                             <th scope="col" class="px-4 py-3">Author</th>
-                            <th scope="col" class="px-4 py-3 text-right">
-                                Actions
-                            </th>
+                            <th scope="col" class="px-4 py-3 text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,9 +66,7 @@
                                     </div>
                                     <!-- Post title and excerpt -->
                                     <div class="flex flex-col">
-                                        <span
-                                            class="font-medium text-gray-900 dark:text-white"
-                                        >
+                                        <span class="font-medium text-gray-900 dark:text-white">
                                             {{ post.title }}
                                         </span>
                                     </div>
@@ -124,9 +104,7 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3">
-                                <div
-                                    class="flex items-center justify-end gap-2"
-                                >
+                                <div class="flex items-center justify-end gap-2">
                                     <Link
                                         :href="route('post.show', post.slug)"
                                         class="inline-flex items-center rounded-lg p-2 text-sm font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:text-primary-500 dark:hover:bg-gray-700 dark:focus:ring-primary-800"
@@ -134,9 +112,7 @@
                                         <EyeIcon class="h-5 w-5" />
                                     </Link>
                                     <Link
-                                        :href="
-                                            route('admin.posts.edit', post.slug)
-                                        "
+                                        :href="route('admin.posts.edit', post.slug)"
                                         class="inline-flex items-center rounded-lg p-2 text-sm font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:text-primary-500 dark:hover:bg-gray-700 dark:focus:ring-primary-800"
                                     >
                                         <PencilSquareIcon class="h-5 w-5" />
@@ -166,13 +142,7 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import { Link, router } from '@inertiajs/vue3';
-import {
-    PlusIcon,
-    MagnifyingGlassIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    EyeIcon,
-} from '@heroicons/vue/24/outline';
+import { PlusIcon, MagnifyingGlassIcon, PencilSquareIcon, TrashIcon, EyeIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     posts: {
@@ -185,8 +155,7 @@ const handlePublish = (slug) => {
     router.patch(
         route('admin.posts.update', slug),
         {
-            published: !props.posts.data.find((post) => post.slug === slug)
-                .published,
+            published: !props.posts.data.find((post) => post.slug === slug).published,
         },
         {
             preserveScroll: true,

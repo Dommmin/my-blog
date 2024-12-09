@@ -3,11 +3,9 @@
         type="button"
         name="Toggle theme"
         id="Toggle theme"
-        class="flex h-11 w-11 items-center justify-center rounded-md border text-white transition-colors border-neutral-200"
+        class="flex h-11 w-11 items-center justify-center rounded-md border text-white transition-colors dark:border-neutral-700 dark:text-white"
         @click="handleToggle"
-        :title="
-            !isFantasyTheme ? 'Switch to light theme' : 'Switch to dark theme'
-        "
+        :title="isFantasyTheme ? 'Switch to dark theme' : 'Switch to fantasy theme'"
     >
         <span class="swap swap-rotate">
             <!-- Ikona słońca (tryb ciemny) -->
@@ -50,6 +48,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 
+// Pobieranie ustawionego motywu z localStorage lub domyślnie 'dark'
 const theme = ref(localStorage.getItem('theme') || 'dark');
 const isFantasyTheme = ref(theme.value === 'fantasy');
 
@@ -65,9 +64,9 @@ const updateTheme = () => {
     localStorage.setItem('theme', theme.value);
 };
 
-// Aktualizacja na zmianę tematu
+// Ustawienie motywu po zmianie
 watch(theme, updateTheme);
 
-// Inicjalizacja na zamontowanie komponentu
+// Inicjalizacja tematu przy pierwszym załadowaniu komponentu
 onMounted(updateTheme);
 </script>

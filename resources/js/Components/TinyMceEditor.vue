@@ -1,9 +1,5 @@
 <template>
-    <Editor
-        v-bind="content"
-        :init="config"
-        tinymceScriptSrc="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"
-    />
+    <Editor v-bind="content" :init="config" tinymceScriptSrc="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js" />
 </template>
 
 <script setup>

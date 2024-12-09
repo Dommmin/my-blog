@@ -1,19 +1,12 @@
 <template>
     <div>
         <!-- Mobile backdrop -->
-        <div
-            v-if="isOpen"
-            class="fixed inset-0 z-10 bg-gray-900/50 md:hidden"
-            @click="$emit('toggle')"
-        />
+        <div v-if="isOpen" class="fixed inset-0 z-10 bg-gray-900/50 md:hidden" @click="$emit('toggle')" />
 
         <!-- Sidebar -->
         <aside
             class="fixed z-20 transition-all duration-300 ease-in-out top-16"
-            :class="[
-                isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
-                'w-64 h-[calc(100vh-64px)]',
-            ]"
+            :class="[isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0', 'w-64 h-[calc(100vh-64px)]']"
         >
             <div
                 class="flex h-full flex-col overflow-y-auto border-r border-gray-200 bg-white px-3 py-4 dark:border-gray-700 dark:bg-black/40"

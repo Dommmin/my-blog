@@ -1,7 +1,5 @@
 <template>
-    <header
-        class="sticky top-0 z-30 h-16 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-black/90"
-    >
+    <header class="sticky top-0 z-30 h-16 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-black/90">
         <div class="flex h-full items-center justify-between px-4">
             <div class="flex items-center gap-4">
                 <button
@@ -10,12 +8,7 @@
                 >
                     <Bars3Icon class="h-6 w-6" />
                 </button>
-                <Link
-                    :href="route('home')"
-                    class="text-xl font-semibold text-gray-800 dark:text-white"
-                >
-                    Blog
-                </Link>
+                <Link :href="route('home')" class="text-xl font-semibold text-gray-800 dark:text-white"> Blog </Link>
             </div>
 
             <div class="flex items-center gap-4">

@@ -13,7 +13,7 @@ Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name(
 Route::put('comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
 Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('/admin')->name('admin.')->group(function () {
     Route::get('/', HomeController::class)->name('home');
     Route::resource('posts', AdminPostController::class)->names([
         'index' => 'posts.index',
@@ -25,4 +25,4 @@ Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
     ]);
 });
 
-Route::middleware('auth')->post('/upload', UploadController::class)->name('upload');
+Route::middleware(['auth', 'admin'])->post('/upload', UploadController::class)->name('upload');

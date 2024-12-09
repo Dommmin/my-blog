@@ -14,40 +14,21 @@
             @drop="handleDrop"
         >
             <!-- Upload State -->
-            <div
-                v-if="!imagePreview"
-                class="flex flex-col items-center justify-center p-8 text-center"
-            >
+            <div v-if="!imagePreview" class="flex flex-col items-center justify-center p-8 text-center">
                 <div class="mb-4">
                     <div
                         class="mx-auto flex h-16 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800"
                     >
-                        <ArrowUpTrayIcon
-                            v-if="dragover"
-                            class="h-16 w-20 text-primary-600 dark:text-primary-400"
-                        />
-                        <PhotoIcon
-                            v-else
-                            class="h-20 w-20 text-gray-600 dark:text-gray-400"
-                        />
+                        <ArrowUpTrayIcon v-if="dragover" class="h-16 w-20 text-primary-600 dark:text-primary-400" />
+                        <PhotoIcon v-else class="h-20 w-20 text-gray-600 dark:text-gray-400" />
                     </div>
                 </div>
                 <div class="space-y-1">
-                    <p
-                        class="text-base font-medium text-gray-700 dark:text-gray-200"
-                    >
-                        {{
-                            dragover
-                                ? 'Drop your image here'
-                                : 'Upload your image'
-                        }}
+                    <p class="text-base font-medium text-gray-700 dark:text-gray-200">
+                        {{ dragover ? 'Drop your image here' : 'Upload your image' }}
                     </p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                        Drag and drop or click to select
-                    </p>
-                    <p class="text-xs text-gray-400 dark:text-gray-500">
-                        PNG, JPG, GIF up to 2MB
-                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Drag and drop or click to select</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500">PNG, JPG, GIF up to 2MB</p>
                 </div>
                 <input
                     type="file"
@@ -59,11 +40,7 @@
 
             <!-- Preview State -->
             <div v-else class="relative">
-                <img
-                    :src="imagePreview"
-                    class="w-full h-64 object-cover rounded-lg"
-                    alt="Preview"
-                />
+                <img :src="imagePreview" class="w-full h-64 object-cover rounded-lg" alt="Preview" />
                 <div
                     class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-150 rounded-lg"
                 >
@@ -84,11 +61,7 @@
 
 <script setup>
 import { ref, watch, defineProps, defineEmits } from 'vue';
-import {
-    XMarkIcon,
-    PhotoIcon,
-    ArrowUpTrayIcon,
-} from '@heroicons/vue/24/outline';
+import { XMarkIcon, PhotoIcon, ArrowUpTrayIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     modelValue: {

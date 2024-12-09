@@ -13,11 +13,7 @@
                     <!--                        {{ showFullContent ? 'Collapse' : 'Read More' }}-->
                     <!--                    </button>-->
                     <div class="mt-8">
-                        <h2
-                            class="text-xl font-bold mb-4 text-gray-900 dark:text-white"
-                        >
-                            Comments
-                        </h2>
+                        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Comments</h2>
                         <div v-if="!comments.data.length">No comments ...</div>
                         <div
                             v-else
@@ -32,17 +28,12 @@
                                     class="w-8 h-8 rounded-full mr-2"
                                 />
                                 <div>
-                                    <h3
-                                        class="font-medium text-gray-900 dark:text-white"
-                                    >
+                                    <h3 class="font-medium text-gray-900 dark:text-white">
                                         {{ comment.user.name }}
                                     </h3>
                                 </div>
                                 <div
-                                    v-if="
-                                        $page.props.auth.user?.id ===
-                                        comment.user.id
-                                    "
+                                    v-if="$page.props.auth.user?.id === comment.user.id"
                                     class="absolute top-4 right-4 flex space-x-2"
                                 >
                                     <button
@@ -61,9 +52,7 @@
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
                                             >
-                                                <path
-                                                    d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3Z"
-                                                />
+                                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3Z" />
                                             </svg>
                                         </i>
                                     </button>
@@ -84,12 +73,8 @@
                                                 stroke-linejoin="round"
                                             >
                                                 <path d="M3 6h18" />
-                                                <path
-                                                    d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
-                                                />
-                                                <path
-                                                    d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"
-                                                />
+                                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
                                             </svg>
                                         </i>
                                     </button>
@@ -106,10 +91,7 @@
                                     class="w-full bg-white dark:bg-gray-600 rounded-lg p-2 mb-2 text-gray-700 dark:text-gray-300"
                                     rows="3"
                                 ></textarea>
-                                <InputError
-                                    :message="editForm.errors.content"
-                                    class="mt-2"
-                                />
+                                <InputError :message="editForm.errors.content" class="mt-2" />
                                 <div class="flex space-x-2">
                                     <button
                                         @click="updateComment(comment.id)"
@@ -130,11 +112,7 @@
                             <Pagination :links="comments.links" />
                         </div>
                         <div v-if="$page.props.auth.user" class="mt-8">
-                            <h2
-                                class="text-xl font-bold mb-4 text-gray-900 dark:text-white"
-                            >
-                                Add Comment
-                            </h2>
+                            <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Add Comment</h2>
                             <div class="flex items-start">
                                 <div class="flex-1">
                                     <textarea
@@ -142,10 +120,7 @@
                                         class="w-full bg-gray-100 dark:bg-gray-700 rounded-lg p-2 mb-2 text-gray-700 dark:text-gray-300"
                                         placeholder="Write your comment..."
                                     ></textarea>
-                                    <InputError
-                                        :message="form.errors.content"
-                                        class="mt-2"
-                                    />
+                                    <InputError :message="form.errors.content" class="mt-2" />
                                     <button
                                         @click="addComment"
                                         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:bg-blue-400 dark:hover:bg-blue-500"
@@ -266,10 +241,7 @@ const toggleContent = () => {
 };
 
 const formattedBody = computed(() => {
-    return props.post.body.replace(
-        /<pre>(.*?)<\/pre>/g,
-        '<pre class="block overflow-x-auto">$1</pre>'
-    );
+    return props.post.body.replace(/<pre>(.*?)<\/pre>/g, '<pre class="block overflow-x-auto">$1</pre>');
 });
 
 // const previewContent = computed(() => {
