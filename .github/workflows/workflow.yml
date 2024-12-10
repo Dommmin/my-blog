@@ -192,9 +192,21 @@ jobs:
             php artisan storage:link
             php artisan migrate --force
 
-            echo 'Resetting Opcache...'
-            php -r \"if (function_exists('opcache_reset')) { opcache_reset(); }\"
-          "
+            cat > aplikacja/opcache_reset.php << EOL
+              <?php
+              if (function_exists('opcache_reset')) {
+              opcache_reset();
+              echo 'Opcache reset successfully.';
+            } else {
+              echo 'Opcache not available.';
+            }
+              EOL
+
+              php aplikacja/opcache_reset.php
+              rm aplikacja/opcache_reset.php
+
+              echo 'Opcache reset complete.'
+            "
 
       - name: Clean up old releases
         run: |
