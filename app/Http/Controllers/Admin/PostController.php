@@ -17,7 +17,12 @@ class PostController extends Controller
     public function index(Request $request)
     {
         return inertia('Admin/Post/Index', [
-            'posts' => Post::getPaginatedPostsForAdmin(),
+            'posts' => Post::getPaginatedPostsForAdmin($request),
+            'filters' => [
+                'search' => $request->input('search', ''),
+                'sort' => $request->input('sort', 'created_at'),
+                'direction' => $request->input('direction', 'desc'),
+            ],
         ]);
     }
 

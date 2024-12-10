@@ -60,11 +60,28 @@ class Post extends Model
             ->onEachSide(1);
     }
 
-    public static function getPaginatedPostsForAdmin()
+    public static function getPaginatedPostsForAdmin($request)
     {
-        return self::query()
-            ->latest('created_at')
+        $query = self::query()
             ->with('user')
+            ->when($request->input('search'), function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($search) {
+                            $userQuery->where('name', 'like', "%{$search}%");
+                        });
+                });
+            });
+
+        $sort = $request->input('sort', 'created_at');
+        $direction = $request->input('direction', 'desc');
+
+        $allowedSorts = ['title', 'created_at', 'status'];
+        $sort = in_array($sort, $allowedSorts, true) ? $sort : 'created_at';
+
+        $query->orderBy($sort, $direction);
+
+        return $query
             ->paginate(10)
             ->onEachSide(1)
             ->withQueryString();

@@ -1,5 +1,3 @@
-<!-- resources/views/errors/404.blade.php -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,6 +30,6 @@
 <body>
 <h1>404</h1>
 <p>Oops! The page you're looking for doesn't exist.</p>
-<p><a href="{{ url('/') }}">Back to Home</a></p>
+<p><a href="{{ route('home') }}">Back to Home</a></p>
 </body>
 </html>

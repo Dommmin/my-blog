@@ -3,10 +3,9 @@
 </template>
 
 <script setup>
-import { useDark } from '@vueuse/core';
 import Editor from '@tinymce/tinymce-vue';
 
-const isDark = useDark();
+const isDark = localStorage.getItem('theme') === 'dark';
 
 const props = defineProps({
     content: Object,

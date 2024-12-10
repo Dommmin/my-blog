@@ -21,8 +21,7 @@ class IsAdmin
             return $next($request);
         }
 
-        // If not an admin, redirect to the home page or another route
-        return abort(404);
+        abort(404);
     }
 }
 

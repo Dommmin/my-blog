@@ -9,7 +9,7 @@
             :class="[isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0', 'w-64 h-[calc(100vh-64px)]']"
         >
             <div
-                class="flex h-full flex-col overflow-y-auto border-r border-gray-200 bg-white px-3 py-4 dark:border-gray-700 dark:bg-black/40"
+                class="flex h-full flex-col overflow-y-auto border-r border-gray-200 bg-slate-400 px-3 py-4 dark:border-gray-700 dark:bg-black"
             >
                 <!-- Navigation -->
                 <nav class="flex-1 space-y-1">
@@ -25,7 +25,7 @@
                                 :class="[
                                     item.current
                                         ? 'text-primary-600 dark:text-primary-500'
-                                        : 'text-gray-500 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white',
+                                        : 'text-gray-100 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white',
                                 ]"
                             />
                             <span
@@ -33,7 +33,7 @@
                                 :class="[
                                     item.current
                                         ? 'text-primary-600 dark:text-primary-500'
-                                        : 'text-gray-500 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white',
+                                        : 'text-gray-100 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white',
                                 ]"
                             >
                                 {{ item.title }}

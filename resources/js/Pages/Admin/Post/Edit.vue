@@ -8,7 +8,7 @@
                     <div class="flex items-center gap-2">
                         <Link
                             :href="route('admin.posts.index')"
-                            class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                            class="btn btn-outline btn-sm"
                         >
                             Cancel
                         </Link>
@@ -16,7 +16,7 @@
                             type="button"
                             @click="submit"
                             :disabled="form.processing"
-                            class="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-primary-700 dark:hover:bg-primary-800"
+                            class="btn btn-outline btn-secondary dark:btn-primary btn-sm"
                         >
                             <span v-if="form.processing">Saving...</span>
                             <span v-else>Update Post</span>

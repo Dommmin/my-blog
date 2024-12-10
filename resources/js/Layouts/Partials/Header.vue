@@ -1,9 +1,9 @@
 <template>
-    <header class="sticky top-0 z-30 h-16 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-black/90">
+    <header class="sticky top-0 z-30 h-16 border-b border-gray-200 bg-slate-500 dark:border-gray-700 dark:bg-black/90">
         <div class="flex h-full items-center justify-between px-4">
             <div class="flex items-center gap-4">
                 <button
-                    class="rounded-lg p-1 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 md:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    class="rounded-lg p-1 text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 md:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                     @click="$emit('toggleSidebar')"
                 >
                     <Bars3Icon class="h-6 w-6" />

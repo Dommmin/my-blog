@@ -4,8 +4,8 @@
         :class="[
             'transition-colors duration-200 ease-in-out',
             active
-                ? 'text-gray-900 bg-gray-200 dark:bg-black/90 dark:text-gray-100'
-                : 'hover:bg-gray-100 dark:hover:bg-black/70 text-gray-600 dark:text-gray-400',
+                ? 'text-gray-900 bg-gray-200 dark:bg-slate-600 dark:text-gray-100'
+                : 'hover:bg-gray-100 dark:hover:bg-slate-600 text-gray-600 dark:text-gray-400',
             className,
         ]"
         prefetch

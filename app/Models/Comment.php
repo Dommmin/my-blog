@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,6 +15,12 @@ class Comment extends Model
 
     protected $guarded = [];
 
+    protected $appends = [
+        'is_modified',
+        'created_at_formatted',
+        'updated_at_formatted',
+    ];
+
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
@@ -22,6 +29,21 @@ class Comment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getIsModifiedAttribute(): bool
+    {
+        return Carbon::parse($this->updated_at)->diffInSeconds(Carbon::parse($this->created_at));
+    }
+
+    public function getCreatedAtFormattedAttribute(): string
+    {
+        return Carbon::parse($this->created_at)->diffForHumans();
+    }
+
+    public function getUpdatedAtFormattedAttribute(): string
+    {
+        return Carbon::parse($this->updated_at)->diffForHumans();
     }
 
     public static function getPaginatedComments(Post $post): LengthAwarePaginator
