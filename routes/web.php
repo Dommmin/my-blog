@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\CommentController;

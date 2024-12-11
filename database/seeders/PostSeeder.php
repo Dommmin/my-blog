@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Post;
@@ -18,7 +20,7 @@ class PostSeeder extends Seeder
     {
         $count = 50;
 
-        $output = new ConsoleOutput;
+        $output = new ConsoleOutput();
 
         $progressBar = new ProgressBar($output, $count);
         $progressBar->setBarWidth(50);

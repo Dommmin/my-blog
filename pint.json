@@ -1,3 +1,9 @@
 {
-    "preset": "laravel"
+    "preset": "laravel",
+    "rules": {
+        "@PSR12": true,
+        "declare_strict_types": true,
+        "strict_comparison": true,
+        "strict_param": true
+    }
 }

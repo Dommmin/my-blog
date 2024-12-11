@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Foundation\Application;
@@ -32,7 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (HttpException $exception, Request $request) {
-            if ($exception->getStatusCode() == 404) {
+            if ($exception->getStatusCode() === 404) {
                 return response()->view('errors.404', [], 404);
             }
         });

@@ -1,8 +1,6 @@
 <template>
     <AdminLayout title="Dashboard">
-        <div class="text-gray-900 dark:text-gray-100">
-            Dashboard
-        </div>
+        <div class="text-gray-900 dark:text-gray-100">Dashboard</div>
     </AdminLayout>
 </template>
 

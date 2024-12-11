@@ -6,12 +6,7 @@
                 <div class="mb-6 flex items-center justify-between">
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Create New Post</h2>
                     <div class="flex items-center gap-2">
-                        <Link
-                            :href="route('admin.posts.index')"
-                            class="btn btn-outline btn-sm"
-                        >
-                            Cancel
-                        </Link>
+                        <Link :href="route('admin.posts.index')" class="btn btn-outline btn-sm"> Cancel </Link>
                         <button
                             type="button"
                             @click="submit"

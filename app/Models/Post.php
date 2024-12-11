@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Carbon\Carbon;
@@ -15,7 +17,9 @@ use Spatie\Sluggable\SlugOptions;
 
 class Post extends Model
 {
-    use HasFactory, HasSlug, SoftDeletes;
+    use HasFactory;
+    use HasSlug;
+    use SoftDeletes;
 
     protected $guarded = [];
 

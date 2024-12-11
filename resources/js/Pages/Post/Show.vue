@@ -10,7 +10,9 @@
                 >
                     <div v-html="formattedBody" />
                     <div class="mt-8">
-                        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Comments ({{ comments.total }})</h2>
+                        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                            Comments ({{ comments.total }})
+                        </h2>
                         <div v-if="!comments.data.length">No comments ...</div>
                         <div
                             v-else
@@ -26,14 +28,23 @@
                                 />
                                 <div>
                                     <h3 class="font-medium text-gray-900 dark:text-white">
-                                        <span :class="{ 'text-blue-600 dark:text-blue-400 badge': comment.user.is_admin }">
-                                          {{ comment.user.is_admin ? 'Admin' : comment.user.name }}
+                                        <span
+                                            :class="{ 'text-blue-600 dark:text-blue-400 badge': comment.user.is_admin }"
+                                        >
+                                            {{ comment.user.is_admin ? 'Admin' : comment.user.name }}
                                         </span>
                                     </h3>
                                 </div>
                                 <div class="flex items-center gap-1 ml-1">
                                     <p class="text-2xl">&#903;</p>
-                                    <p>{{ comment.is_modified ? comment.updated_at_formatted : comment.created_at_formatted }} {{ comment.is_modified ? '&#903; Edited' : '' }}</p>
+                                    <p>
+                                        {{
+                                            comment.is_modified
+                                                ? comment.updated_at_formatted
+                                                : comment.created_at_formatted
+                                        }}
+                                        {{ comment.is_modified ? '&#903; Edited' : '' }}
+                                    </p>
                                 </div>
                                 <div
                                     v-if="$page.props.auth.user?.id === comment.user.id"
@@ -151,9 +162,9 @@ import BackButton from '@/Components/BackButton.vue';
 interface Comment {
     id: number;
     content: string;
-    created_at_formatted: string,
-    updated_at_formatted: string,
-    is_modified: boolean,
+    created_at_formatted: string;
+    updated_at_formatted: string;
+    is_modified: boolean;
     user: {
         id: number;
         username: string;

@@ -42,64 +42,49 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
                     <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-cyan-800 dark:text-gray-400">
-                    <tr>
-                        <th
-                            scope="col"
-                            class="px-4 py-3 cursor-pointer hover:bg-gray-100"
-                            @click="sort('title')"
-                        >
-                            Title
-                            <SortIndicator
-                                :active="filters.sort === 'title'"
-                                :direction="filters.direction"
-                            />
-                        </th>
-                        <th
-                            scope="col"
-                            class="px-4 py-3"
-                        >
-                            Published
-                        </th>
-                        <th
-                            scope="col"
-                            class="px-2 py-3 cursor-pointer hover:bg-gray-100"
-                            @click="sort('created_at')"
-                        >
-                            Created
-                            <SortIndicator
-                                :active="filters.sort === 'created_at'"
-                                :direction="filters.direction"
-                            />
-                        </th>
-                        <th scope="col" class="px-4 py-3">Author</th>
-                        <th scope="col" class="px-4 py-3 text-right">Actions</th>
-                    </tr>
+                        <tr>
+                            <th scope="col" class="px-4 py-3 cursor-pointer hover:bg-gray-100" @click="sort('title')">
+                                Title
+                                <SortIndicator :active="filters.sort === 'title'" :direction="filters.direction" />
+                            </th>
+                            <th scope="col" class="px-4 py-3">Published</th>
+                            <th
+                                scope="col"
+                                class="px-2 py-3 cursor-pointer hover:bg-gray-100"
+                                @click="sort('created_at')"
+                            >
+                                Created
+                                <SortIndicator :active="filters.sort === 'created_at'" :direction="filters.direction" />
+                            </th>
+                            <th scope="col" class="px-4 py-3">Author</th>
+                            <th scope="col" class="px-4 py-3 text-right">Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr
-                        v-for="post in posts.data"
-                        :key="post.id"
-                        class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                    >
-                        <td class="px-4 py-3">
-                            <div class="flex items-center">
-                                <!-- Post thumbnail -->
-                                <div class="mr-3 h-10 w-10 flex-shrink-0">
-                                    <img
-                                        :src="post.image"
-                                        class="h-10 w-10 rounded-lg object-cover"
-                                        :alt="post.title"
-                                    />
-                                </div>
-                                <!-- Post title and excerpt -->
-                                <div class="flex flex-col">
+                        <tr
+                            v-for="post in posts.data"
+                            :key="post.id"
+                            class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                        >
+                            <td class="px-4 py-3">
+                                <div class="flex items-center">
+                                    <!-- Post thumbnail -->
+                                    <div class="mr-3 h-10 w-10 flex-shrink-0">
+                                        <img
+                                            :src="post.image"
+                                            class="h-10 w-10 rounded-lg object-cover"
+                                            :alt="post.title"
+                                        />
+                                    </div>
+                                    <!-- Post title and excerpt -->
+                                    <div class="flex flex-col">
                                         <span class="font-medium text-gray-900 dark:text-white">
                                             {{ post.title }}
                                         </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3">
+                            </td>
+                            <td class="px-4 py-3">
                                 <span
                                     class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium"
                                     :class="{
@@ -116,43 +101,40 @@
                                         :checked="post.published"
                                     />
                                 </span>
-                        </td>
-                        <td class="px-4 py-3 whitespace-nowrap">
-                            {{ post.created_at }}
-                        </td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center">
-                                <img
-                                    :src="post.user.profile_photo_url"
-                                    class="mr-2 h-6 w-6 rounded-full"
-                                    :alt="post.user.name"
-                                />
-                                <span>{{ post.user.name }}</span>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center justify-end gap-2">
-                                <Link
-                                    :href="route('post.show', post.slug)"
-                                    class="btn btn-xs btn-outline btn-success"
-                                >
-                                    <EyeIcon class="h-5 w-5" />
-                                </Link>
-                                <Link
-                                    :href="route('admin.posts.edit', post.slug)"
-                                    class="btn btn-xs btn-outline btn-info"
-                                >
-                                    <PencilSquareIcon class="h-5 w-5" />
-                                </Link>
-                                <button
-                                    @click="handleDelete(post.slug)"
-                                    class="btn btn-xs btn-outline btn-error"
-                                >
-                                    <TrashIcon class="h-5 w-5" />
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                {{ post.created_at }}
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center">
+                                    <img
+                                        :src="post.user.profile_photo_url"
+                                        class="mr-2 h-6 w-6 rounded-full"
+                                        :alt="post.user.name"
+                                    />
+                                    <span>{{ post.user.name }}</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center justify-end gap-2">
+                                    <Link
+                                        :href="route('post.show', post.slug)"
+                                        class="btn btn-xs btn-outline btn-success"
+                                    >
+                                        <EyeIcon class="h-5 w-5" />
+                                    </Link>
+                                    <Link
+                                        :href="route('admin.posts.edit', post.slug)"
+                                        class="btn btn-xs btn-outline btn-info"
+                                    >
+                                        <PencilSquareIcon class="h-5 w-5" />
+                                    </Link>
+                                    <button @click="handleDelete(post.slug)" class="btn btn-xs btn-outline btn-error">
+                                        <TrashIcon class="h-5 w-5" />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -169,13 +151,7 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
-import {
-    PlusIcon,
-    MagnifyingGlassIcon,
-    PencilSquareIcon,
-    EyeIcon,
-    TrashIcon
-} from '@heroicons/vue/24/outline';
+import { PlusIcon, MagnifyingGlassIcon, PencilSquareIcon, EyeIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
 import SortIndicator from '@/Components/SortIndicator.vue';
 
@@ -190,9 +166,9 @@ const props = defineProps({
         default: () => ({
             search: '',
             sort: 'created_at',
-            direction: 'desc'
-        })
-    }
+            direction: 'desc',
+        }),
+    },
 });
 
 const form = useForm({
@@ -210,30 +186,36 @@ const debounce = (func, delay) => {
 
 // Sorting method
 const sort = (column) => {
-    const direction = props.filters.sort === column && props.filters.direction === 'desc'
-        ? 'asc'
-        : 'desc';
+    const direction = props.filters.sort === column && props.filters.direction === 'desc' ? 'asc' : 'desc';
 
-    router.get(route('admin.posts.index'), {
-        sort: column,
-        direction: direction,
-        search: form.search,
-    }, {
-        preserveState: true,
-        preserveScroll: true,
-    });
+    router.get(
+        route('admin.posts.index'),
+        {
+            sort: column,
+            direction: direction,
+            search: form.search,
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+        }
+    );
 };
 
 // Debounced search method
 const debouncedSearch = debounce(() => {
-    router.get(route('admin.posts.index'), {
-        search: form.search,
-        sort: props.filters.sort,
-        direction: props.filters.direction,
-    }, {
-        preserveState: true,
-        preserveScroll: true,
-    });
+    router.get(
+        route('admin.posts.index'),
+        {
+            search: form.search,
+            sort: props.filters.sort,
+            direction: props.filters.direction,
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+        }
+    );
 }, 300);
 
 const handlePublish = (slug) => {

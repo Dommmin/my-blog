@@ -10,7 +10,6 @@ import TextInput from '@/Components/TextInput.vue';
 
 console.log(localStorage.getItem('theme'));
 
-
 const form = useForm({
     name: '',
     email: '',
