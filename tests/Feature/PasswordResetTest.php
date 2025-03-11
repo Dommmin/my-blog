@@ -7,15 +7,15 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Fortify\Features;
 
-test('reset password link screen can be rendered', function () {
+test('reset password link screen can be rendered', function (): void {
     $response = $this->get('/forgot-password');
 
     $response->assertStatus(200);
-})->skip(function () {
+})->skip(function (): bool {
     return ! Features::enabled(Features::resetPasswords());
 }, 'Password updates are not enabled.');
 
-test('reset password link can be requested', function () {
+test('reset password link can be requested', function (): void {
     Notification::fake();
 
     $user = User::factory()->create();
@@ -25,11 +25,11 @@ test('reset password link can be requested', function () {
     ]);
 
     Notification::assertSentTo($user, ResetPassword::class);
-})->skip(function () {
+})->skip(function (): bool {
     return ! Features::enabled(Features::resetPasswords());
 }, 'Password updates are not enabled.');
 
-test('reset password screen can be rendered', function () {
+test('reset password screen can be rendered', function (): void {
     Notification::fake();
 
     $user = User::factory()->create();
@@ -38,18 +38,18 @@ test('reset password screen can be rendered', function () {
         'email' => $user->email,
     ]);
 
-    Notification::assertSentTo($user, ResetPassword::class, function (object $notification) {
+    Notification::assertSentTo($user, ResetPassword::class, function (object $notification): true {
         $response = $this->get('/reset-password/'.$notification->token);
 
         $response->assertStatus(200);
 
         return true;
     });
-})->skip(function () {
+})->skip(function (): bool {
     return ! Features::enabled(Features::resetPasswords());
 }, 'Password updates are not enabled.');
 
-test('password can be reset with valid token', function () {
+test('password can be reset with valid token', function (): void {
     Notification::fake();
 
     $user = User::factory()->create();
@@ -58,7 +58,7 @@ test('password can be reset with valid token', function () {
         'email' => $user->email,
     ]);
 
-    Notification::assertSentTo($user, ResetPassword::class, function (object $notification) use ($user) {
+    Notification::assertSentTo($user, ResetPassword::class, function (object $notification) use ($user): true {
         $response = $this->post('/reset-password', [
             'token' => $notification->token,
             'email' => $user->email,
@@ -70,6 +70,6 @@ test('password can be reset with valid token', function () {
 
         return true;
     });
-})->skip(function () {
+})->skip(function (): bool {
     return ! Features::enabled(Features::resetPasswords());
 }, 'Password updates are not enabled.');

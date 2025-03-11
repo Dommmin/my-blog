@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
+use Carbon\Month;
+use Carbon\WeekDay;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,7 +48,7 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function getCreatedAtAttribute($value): string
+    public function getCreatedAtAttribute(DateTimeInterface|WeekDay|Month|string|int|float|null $value): string
     {
         return Carbon::parse($value)->diffForHumans();
     }
@@ -69,9 +72,9 @@ class Post extends Model
         $query = self::query()
             ->with('user')
             ->when($request->input('search'), function ($query, $search) {
-                return $query->where(function ($q) use ($search) {
+                return $query->where(function ($q) use ($search): void {
                     $q->where('title', 'like', "%{$search}%")
-                        ->orWhereHas('user', function ($userQuery) use ($search) {
+                        ->orWhereHas('user', function ($userQuery) use ($search): void {
                             $userQuery->where('name', 'like', "%{$search}%");
                         });
                 });
