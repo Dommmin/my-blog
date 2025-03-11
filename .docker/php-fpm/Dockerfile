@@ -28,16 +28,23 @@ RUN apk update && apk add --no-cache \
     tree \
     htop \
     shadow \
+    # Runtime dependencies
+    imagemagick \
+    libpng \
+    libjpeg-turbo \
+    libwebp \
+    libzip \
+    freetype \
+    openssl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install pdo pdo_mysql zip bcmath pcntl \
     && pecl install redis xdebug imagick swoole \
-    && docker-php-ext-enable imagick
+    && docker-php-ext-enable redis swoole imagick \
+    && apk del --purge build-base autoconf libtool
 
-# Modyfikacja użytkownika www-data
-RUN apk add --no-cache shadow \
-    && usermod -u ${UID} www-data \
-    && groupmod -g ${GID} www-data
+# Modify www-data user and group
+RUN usermod -u ${UID} www-data && groupmod -g ${GID} www-data
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
