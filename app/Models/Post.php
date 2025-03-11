@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Observers\PostObserver;
 use Carbon\Carbon;
 use Carbon\Month;
 use Carbon\WeekDay;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+#[ObservedBy([PostObserver::class])]
 class Post extends Model
 {
     use HasFactory;
@@ -67,11 +70,11 @@ class Post extends Model
             ->onEachSide(1);
     }
 
-    public static function getPaginatedPostsForAdmin($request)
+    public static function getPaginatedPostsForAdmin(array $filters = []): LengthAwarePaginator
     {
         $query = self::query()
             ->with('user')
-            ->when($request->input('search'), function ($query, $search) {
+            ->when(isset($filters['search']), function ($query, $search) {
                 return $query->where(function ($q) use ($search): void {
                     $q->where('title', 'like', "%{$search}%")
                         ->orWhereHas('user', function ($userQuery) use ($search): void {
@@ -80,8 +83,8 @@ class Post extends Model
                 });
             });
 
-        $sort = $request->input('sort', 'created_at');
-        $direction = $request->input('direction', 'desc');
+        $sort = $filters['sort'] ?? 'created_at';
+        $direction = $filters['direction'] ?? 'desc';
 
         $allowedSorts = ['title', 'created_at', 'status'];
         $sort = in_array($sort, $allowedSorts, true) ? $sort : 'created_at';
@@ -92,5 +95,10 @@ class Post extends Model
             ->paginate(10)
             ->onEachSide(1)
             ->withQueryString();
+    }
+
+    public function isPublished()
+    {
+        return $this->published;
     }
 }

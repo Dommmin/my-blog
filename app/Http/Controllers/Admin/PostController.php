@@ -18,8 +18,15 @@ class PostController extends Controller
 
     public function index(Request $request)
     {
+        $filters = $request->only(['search', 'sort', 'direction']);
+        $page = $request->query('page', 1);
+
+        $posts = \Cache::tags(['admin-posts'])->rememberForever('admin-posts-'.$page, function () use ($filters) {
+            return Post::getPaginatedPostsForAdmin($filters);
+        });
+
         return inertia('Admin/Post/Index', [
-            'posts' => Post::getPaginatedPostsForAdmin($request),
+            'posts' => $posts,
             'filters' => [
                 'search' => $request->input('search', ''),
                 'sort' => $request->input('sort', 'created_at'),
