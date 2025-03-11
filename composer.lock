@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bda6cc8014328ed8b397a63f363a31eb",
+    "content-hash": "954278cfd239c6feff8b569b35ed9e16",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -9875,12 +9875,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "eab95f065c8f07444ff8ea062ae32a2df83e20ea"
+                "reference": "71049148a240f6e59dde72a36469acd56b1470ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/eab95f065c8f07444ff8ea062ae32a2df83e20ea",
-                "reference": "eab95f065c8f07444ff8ea062ae32a2df83e20ea",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/71049148a240f6e59dde72a36469acd56b1470ec",
+                "reference": "71049148a240f6e59dde72a36469acd56b1470ec",
                 "shasum": ""
             },
             "conflict": {
@@ -10379,7 +10379,7 @@
                 "pimcore/demo": "<10.3",
                 "pimcore/ecommerce-framework-bundle": "<1.0.10",
                 "pimcore/perspective-editor": "<1.5.1",
-                "pimcore/pimcore": "<11.2.4|>=11.4.2,<11.5.3",
+                "pimcore/pimcore": "<11.5.4",
                 "pixelfed/pixelfed": "<0.11.11",
                 "plotly/plotly.js": "<2.25.2",
                 "pocketmine/bedrock-protocol": "<8.0.2",
@@ -10744,7 +10744,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-11T21:04:43+00:00"
+            "time": "2025-03-11T22:05:10+00:00"
         },
         {
             "name": "sebastian/cli-parser",
